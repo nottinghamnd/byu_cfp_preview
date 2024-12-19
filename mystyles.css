@@ -1,0 +1,80 @@
+body{
+    background-color: rgb(0, 0, 0);
+    /* background-image: url(cfplogo.jpeg); */
+    background-size: cover;
+    background-position: center;
+
+}
+h1{
+    font-size: 400%;
+    margin: 5px;
+}
+
+a{
+    color: rgb(0, 0, 71);
+    text-decoration: none;
+}
+
+a:visited{
+    color: rgb(0, 0, 71);
+}
+a:hover{
+    font-weight: bold;
+}
+
+.tan-link{
+    color: bisque;
+}
+#tan-link{
+    color: bisque;
+}
+
+.common{
+    position: absolute;
+    font-family: 'Times New Roman', Times, serif;
+    color: bisque;
+
+}
+.top{
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    text-align: center;
+    border: 5px black;
+    background-color: rgb(0, 0, 71);
+    
+}
+.nav{
+    text-align: center;
+    top: 82px;
+    right: 0px;
+    left: 0px;
+    background-color: bisque;
+    color: rgb(0, 0, 72);
+    border: 5px bisque;
+    padding: 5px;
+
+}
+
+.content{
+    top: 100px;
+    bottom: 20px;
+    right: 0px;
+    left: 0px;
+    margin: 20px;
+
+}
+
+.bottom{
+    text-align: center;
+    position:fixed;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    background-color: rgb(0, 0, 71);
+    padding: 5px;
+
+}
+.img{
+    opacity: 20%;
+}

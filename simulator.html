@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale: 1.0">
+    <title>Random 12-Team Playoff Bracket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #bracket {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .round {
+            margin: 20px;
+            font-size: 18px;
+        }
+
+        .team {
+            display: inline-block;
+            width: 200px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            margin: 5px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        .seed {
+            font-size: 14px;
+            font-weight: normal;
+            color: #555;
+        }
+
+        .matchup {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px;
+        }
+
+        .winner {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 5px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .advancing-team {
+            font-weight: bold;
+            background-color: #e0e0e0;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .round-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Random 12-Team Playoff Bracket</h1>
+        <button onclick="generateBracket()">Generate Bracket</button>
+        <button onclick="advanceWinners()">Advance Winners</button>
+        <div id="bracket"></div>
+    </div>
+
+    <script>
+        let currentBracket = [];
+        let nextRound = [];
+
+        const teams = [
+            "Alabama", "Arizona", "Arkansas", "Auburn", "Ball State", "Baylor", "Boise State", "Boston College", "Buffalo", "BYU", "California", "Cincinnati",
+            "Clemson", "Coastal Carolina", "Colorado", "Duke", "East Carolina", "Florida", "Florida State", "Georgia", "Georgia State", "Hawaii", "Houston", "Illinois",
+            "Indiana", "Iowa", "Iowa State", "Kansas", "Kansas State", "Kentucky", "Louisiana Tech", "Louisville", "LSU", "Marshall", "Maryland", "Memphis",
+            "Michigan", "Michigan State", "Minnesota", "Mississippi State", "Missouri", "NC State", "Nebraska", "North Carolina", "Northwestern", "Notre Dame",
+            "Ohio State", "Oklahoma", "Oklahoma State", "Ole Miss", "Oregon", "Oregon State", "Penn State", "Purdue", "Rice", "Rutgers", "San Diego State",
+            "SMU", "South Carolina", "Southern Miss", "Syracuse", "TCU", "Temple", "Tennessee", "Texas", "Texas A&M", "Texas State", "Toledo", "Tulane",
+            "Tulsa", "UCLA", "UCF", "Utah", "Utah State", "Vanderbilt", "Virginia", "Virginia Tech", "Wake Forest", "Washington", "Washington State", "West Virginia",
+            "Wisconsin", "Wyoming", "Army", "Liberty", "Middle Tennessee", "New Mexico", "Northern Illinois", "South Alabama", "Western Kentucky"
+        ];
+
+        function generateBracket() {
+            // Shuffle the teams array and select 12 teams
+            const shuffledTeams = teams.sort(() => 0.5 - Math.random()).slice(0, 12);
+
+            // Create the playoff matchups
+            const bracketDiv = document.getElementById('bracket');
+            bracketDiv.innerHTML = ''; // Clear previous bracket if any
+
+            // First, the teams that get a bye: seeds 1, 2, 3, and 4
+            currentBracket = [
+                {seed1: 1, team1: shuffledTeams[0], seed2: 'BYE', team2: ''},
+                {seed1: 2, team1: shuffledTeams[1], seed2: 'BYE', team2: ''},
+                {seed1: 3, team1: shuffledTeams[2], seed2: 'BYE', team2: ''},
+                {seed1: 4, team1: shuffledTeams[3], seed2: 'BYE', team2: ''},
+                {seed1: 5, team1: shuffledTeams[4], seed2: 12, team2: shuffledTeams[11]},
+                {seed1: 6, team1: shuffledTeams[5], seed2: 11, team2: shuffledTeams[10]},
+                {seed1: 7, team1: shuffledTeams[6], seed2: 10, team2: shuffledTeams[9]},
+                {seed1: 8, team1: shuffledTeams[7], seed2: 9, team2: shuffledTeams[8]}
+            ];
+
+            // Display teams and matchups
+            const firstRoundDiv = document.createElement('div');
+            firstRoundDiv.classList.add('round');
+            firstRoundDiv.innerHTML = '<div class="round-title">Round 1 (First Week)</div>';
+
+            currentBracket.forEach(matchup => {
+                const matchupDiv = document.createElement('div');
+                matchupDiv.classList.add('matchup');
+
+                if (matchup.team2 === 'BYE') {
+                    matchupDiv.innerHTML = `
+                        <div class="team">${matchup.team1} <span class="seed">Seed ${matchup.seed1}</span> gets a BYE</div>
+                    `;
+                } else {
+                    matchupDiv.innerHTML = `
+                        <div class="team">${matchup.team1} <span class="seed">Seed ${matchup.seed1}</span></div>
+                        <div class="team">vs</div>
+                        <div class="team">${matchup.team2} <span class="seed">Seed ${matchup.seed2}</span></div>
+                    `;
+                }
+
+                firstRoundDiv.appendChild(matchupDiv);
+            });
+
+            bracketDiv.appendChild(firstRoundDiv);
+        }
+
+        function advanceWinners() {
+            nextRound = [];
+
+            // Simulate winners (randomly pick a winner for now)
+            currentBracket.forEach(matchup => {
+                if (matchup.team2 === 'BYE') {
+                    nextRound.push({seed: matchup.seed1, team: matchup.team1});
+                } else {
+                    const winner = Math.random() > 0.5 ? matchup.team1 : matchup.team2;
+                    const winnerSeed = winner === matchup.team1 ? matchup.seed1 : matchup.seed2;
+                    nextRound.push({seed: winnerSeed, team: winner});
+                }
+            });
+
+            // Second round: Correctly match teams
+            const bracketDiv = document.getElementById('bracket');
+            const secondRoundDiv = document.createElement('div');
+            secondRoundDiv.classList.add('round');
+            secondRoundDiv.innerHTML = '<div class="round-title">Round 2</div>';
+
+            // Match seeds 1-4 with winners from first round
+            const secondRoundTeams = [
+                {team1: nextRound[4].team, seed1: 1, team2: nextRound[0].team, seed2: 8}, // Seed 1 vs winner of 8 and 9
+                {team1: nextRound[5].team, seed1: 2, team2: nextRound[1].team, seed2: 7}, // Seed 2 vs winner of 10 and 7
+                {team1: nextRound[6].team, seed1: 3, team2: nextRound[2].team, seed2: 6}, // Seed 3 vs winner of 6 and 11
+                {team1: nextRound[7].team, seed1: 4, team2: nextRound[3].team, seed2: 5}, // Seed 4 vs winner of 5 and 12
+            ];
+
+            secondRoundTeams.forEach(matchup => {
+                const matchupDiv = document.createElement('div');
+                matchupDiv.classList.add('matchup');
+                matchupDiv.innerHTML = `
+                    <div class="team">${matchup.team1} <span class="seed">Seed ${matchup.seed1}</span></div>
+                    <div class="team">vs</div>
+                    <div class="team">${matchup.team2} <span class="seed">Seed ${matchup.seed2}</span></div>
+                `;
+                secondRoundDiv.appendChild(matchupDiv);
+            });
+
+            bracketDiv.appendChild(secondRoundDiv);
+
+            // Third round: Match winners of Round 2
+            const thirdRoundTeams = [
+                {team1: secondRoundTeams[0].team1, seed1: secondRoundTeams[0].seed1, team2: secondRoundTeams[1].team1, seed2: secondRoundTeams[1].seed1}, // Winner 1 vs Winner 2
+                {team1: secondRoundTeams[2].team1, seed1: secondRoundTeams[2].seed1, team2: secondRoundTeams[3].team1, seed2: secondRoundTeams[3].seed1}, // Winner 3 vs Winner 4
+            ];
+
+            const thirdRoundDiv = document.createElement('div');
+            thirdRoundDiv.classList.add('round');
+            thirdRoundDiv.innerHTML = '<div class="round-title">Round 3</div>';
+
+            thirdRoundTeams.forEach(matchup => {
+                const matchupDiv = document.createElement('div');
+                matchupDiv.classList.add('matchup');
+                matchupDiv.innerHTML = `
+                    <div class="team">${matchup.team1} <span class="seed">Seed ${matchup.seed1}</span></div>
+                    <div class="team">vs</div>
+                    <div class="team">${matchup.team2} <span class="seed">Seed ${matchup.seed2}</span></div>
+                `;
+                thirdRoundDiv.appendChild(matchupDiv);
+            });
+
+            bracketDiv.appendChild(thirdRoundDiv);
+
+            // Final round (Round 4): Championship
+            const finalRoundDiv = document.createElement('div');
+            finalRoundDiv.classList.add('round');
+            finalRoundDiv.innerHTML = '<div class="round-title">Championship</div>';
+
+            const finalMatchup = {team1: thirdRoundTeams[0].team1, seed1: thirdRoundTeams[0].seed1, team2: thirdRoundTeams[1].team1, seed2: thirdRoundTeams[1].seed1};
+            finalRoundDiv.innerHTML += `
+                <div class="matchup">
+                    <div class="team">${finalMatchup.team1} <span class="seed">Seed ${finalMatchup.seed1}</span></div>
+                    <div class="team">vs</div>
+                    <div class="team">${finalMatchup.team2} <span class="seed">Seed ${finalMatchup.seed2}</span></div>
+                </div>
+            `;
+
+            bracketDiv.appendChild(finalRoundDiv);
+
+            // Round 5: Declare Final Winner
+            const round5Div = document.createElement('div');
+            round5Div.classList.add('round');
+            round5Div.innerHTML = '<div class="round-title">Round 5 (Final Winner)</div>';
+
+            const round5Winner = Math.random() > 0.5 ? finalMatchup.team1 : finalMatchup.team2;
+            round5Div.innerHTML += `
+                <div class="matchup">
+                    <div class="team">${round5Winner} <span class="seed">Champion!</span></div>
+                </div>
+            `;
+
+            bracketDiv.appendChild(round5Div);
+        }
+    </script>
+</body>
+</html>
